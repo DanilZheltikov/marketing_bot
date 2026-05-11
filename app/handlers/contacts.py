@@ -2,9 +2,8 @@ from aiogram import F, Router
 from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import Message, ReplyKeyboardRemove
 
-from core.database import Repositories
-from core.schemas import ContactCreate
-
+from core.database import UsersRepository
+from core.schemas import UserCreate
 router = Router(name='contacts')
 
 
@@ -12,10 +11,10 @@ router = Router(name='contacts')
 async def cmd_start(
     message: Message,
     command: CommandObject,
-    repositories: Repositories
+    user_crud: UsersRepository
 ) -> None:
-    await repositories.contacts.add_contact(
-        ContactCreate.model_validate(
+    await user_crud.add_user(
+        UserCreate.model_validate(
             message.from_user,
             context={'user_role': command.args}
         )
@@ -24,13 +23,13 @@ async def cmd_start(
 
 
 @router.message(F.contact)
-async def handle_contact(message: Message, repositories: Repositories) -> None:
+async def handle_contact(message: Message, user_crud: UsersRepository) -> None:
     if message.contact.user_id != message.from_user.id:
         await message.answer(
             text='Отправьте, пожалуйста, свой контакт, через кнопку в меню'
         )
         return
-    await repositories.contacts.add_phone_number_to_contact(
+    await user_crud.set_phone_number(
         phone_number=message.contact.phone_number,
         user_id=message.from_user.id
     )

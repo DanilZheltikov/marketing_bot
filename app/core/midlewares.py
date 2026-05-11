@@ -4,7 +4,7 @@ import aiosqlite
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 
-from core.database import Repositories
+from core.database import UsersRepository
 
 
 class DatabaseMiddleware(BaseMiddleware):
@@ -20,5 +20,5 @@ class DatabaseMiddleware(BaseMiddleware):
     ) -> Any:
         async with aiosqlite.connect(self.db_path) as db:
             db.row_factory = aiosqlite.Row
-            data['repositories'] = Repositories(db)
+            data['user_crud'] = UsersRepository(db)
             return await handler(event, data)

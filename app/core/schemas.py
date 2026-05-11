@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class ContactCreate(BaseModel):
+class UserCreate(BaseModel):
     user_id: int = Field(..., alias='id')
     username: str | None
     first_name: str | None
