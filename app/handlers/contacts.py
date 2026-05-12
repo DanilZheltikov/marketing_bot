@@ -2,6 +2,7 @@ from aiogram import F, Router
 from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import Message, ReplyKeyboardRemove
 
+from core.constants import CONTACT_RECEIVED, ERROR_MESSAGE
 from core.database import UsersRepository
 from core.schemas import UserCreate
 from keyboards.contacts import contact_keyboard
@@ -31,7 +32,7 @@ async def cmd_start(
 async def handle_contact(message: Message, user_crud: UsersRepository) -> None:
     if message.contact.user_id != message.from_user.id:
         await message.answer(
-            text='Отправьте, пожалуйста, свой контакт, через кнопку в меню',
+            text=ERROR_MESSAGE,
             reply_markup=contact_keyboard
         )
         return
@@ -40,6 +41,6 @@ async def handle_contact(message: Message, user_crud: UsersRepository) -> None:
         user_id=message.from_user.id
     )
     await message.answer(
-        text='Снова просто текст',
+        text=CONTACT_RECEIVED,
         reply_markup=ReplyKeyboardRemove()
     )

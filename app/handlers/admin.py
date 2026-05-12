@@ -3,6 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 
 from core.config import settings
+from core.constants import ADMIN_WELCOME_MESSAGE
 from core.middlewares import AdminMiddleware
 from keyboards.admin import get_admin_panel_keyboard
 
@@ -15,6 +16,6 @@ router.callback_query.middleware(AdminMiddleware(settings.admin))
 @router.message(Command('admin'))
 async def cmd_admin(message: Message):
     await message.answer(
-        text='Панель администратора',
+        text=ADMIN_WELCOME_MESSAGE,
         reply_markup=get_admin_panel_keyboard()
     )
