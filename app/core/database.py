@@ -62,6 +62,12 @@ async def init_db() -> None:
                 phone_number TEXT,
                 cold INTEGER DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+
+            CREATE TABLE IF NOT EXISTS posts (
+                step_number INTEGER PRIMARY KEY,
+                post_text TEXT NOT NULL,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
             """
         )
