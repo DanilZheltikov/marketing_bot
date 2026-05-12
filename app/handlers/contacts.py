@@ -15,7 +15,7 @@ async def cmd_start(
 ) -> None:
     await user_crud.add_user(
         UserCreate.model_validate(
-            message.from_user,
+            message.from_user.model_dump(),
             context={'user_role': command.args}
         )
     )
