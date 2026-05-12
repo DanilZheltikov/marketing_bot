@@ -6,7 +6,7 @@ from core.schemas import UserCreate
 
 
 class UsersRepository:
-    """Отвечает за CRUD-операции с сущностью Contact в базе SQLite"""
+    """Отвечает за CRUD-операции с сущностью User в базе SQLite"""
 
     def __init__(self, connection: aiosqlite.Connection):
         self.db = connection
@@ -51,8 +51,8 @@ class UsersRepository:
 
 async def init_db() -> None:
     """Инициализация таблиц при старте"""
-    async with aiosqlite.connect(settings.db_name) as db:
-        await db.execute(
+    async with aiosqlite.connect(settings.db_url) as db:
+        await db.executescript(
             """
             CREATE TABLE IF NOT EXISTS users (
                 user_id INTEGER PRIMARY KEY,

@@ -8,6 +8,7 @@ from core.database import UsersRepository
 
 
 class DatabaseMiddleware(BaseMiddleware):
+    """Мидлварь для работы с базой."""
 
     def __init__(self, db_path: str):
         self.db_path = db_path
@@ -21,4 +22,5 @@ class DatabaseMiddleware(BaseMiddleware):
         async with aiosqlite.connect(self.db_path) as db:
             db.row_factory = aiosqlite.Row
             data['user_crud'] = UsersRepository(db)
+
             return await handler(event, data)
