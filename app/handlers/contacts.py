@@ -4,6 +4,8 @@ from aiogram.types import Message, ReplyKeyboardRemove
 
 from core.database import UsersRepository
 from core.schemas import UserCreate
+from keyboards.contact import contact_keyboard
+
 router = Router(name='contacts')
 
 
@@ -19,14 +21,18 @@ async def cmd_start(
             context={'user_role': command.args}
         )
     )
-    await message.answer(text='Пока просто текст', reply_markup=None)
+    await message.answer(
+        text='Пока просто текст',
+        reply_markup=contact_keyboard
+    )
 
 
 @router.message(F.contact)
 async def handle_contact(message: Message, user_crud: UsersRepository) -> None:
     if message.contact.user_id != message.from_user.id:
         await message.answer(
-            text='Отправьте, пожалуйста, свой контакт, через кнопку в меню'
+            text='Отправьте, пожалуйста, свой контакт, через кнопку в меню',
+            reply_markup=contact_keyboard
         )
         return
     await user_crud.set_phone_number(
