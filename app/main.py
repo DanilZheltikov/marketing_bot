@@ -8,6 +8,7 @@ from core.config import settings
 from core.database import init_db
 from core.middlewares import DatabaseMiddleware
 from handlers.contacts import router as contact_router
+from handlers.admin import router as admin_router
 
 
 async def main() -> None:
@@ -16,6 +17,8 @@ async def main() -> None:
     dp = Dispatcher()
 
     dp.update.middleware(DatabaseMiddleware(db_path=settings.db_url))
+
+    dp.include_router(admin_router)
     dp.include_router(contact_router)
 
     await dp.start_polling(bot)

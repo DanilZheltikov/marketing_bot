@@ -24,3 +24,24 @@ class DatabaseMiddleware(BaseMiddleware):
             data['user_crud'] = UsersRepository(db)
 
             return await handler(event, data)
+
+
+class AdminMiddleware(BaseMiddleware):
+    def __init__(self, admin_id: int):
+        self.admin_id = admin_id
+
+    async def __call__(
+        self,
+        handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: dict[str, Any]
+    ) -> Any:
+        user = data.get('event_from_user')
+
+        if not user:
+            return
+
+        if user.id != self.admin_id:
+            return
+
+        return await handler(event, data)
