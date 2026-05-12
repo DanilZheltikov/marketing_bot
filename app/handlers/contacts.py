@@ -4,7 +4,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 
 from core.database import UsersRepository
 from core.schemas import UserCreate
-from keyboards.contact import contact_keyboard
+from keyboards.contacts import contact_keyboard
 
 router = Router(name='contacts')
 
