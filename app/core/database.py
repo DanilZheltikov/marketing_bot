@@ -14,7 +14,7 @@ async def init_db() -> None:
     """Инициализация таблиц при старте"""
     async with aiosqlite.connect(settings.db_url) as db:
         await db.executescript(
-            """
+            """--sql
             CREATE TABLE IF NOT EXISTS users (
                 user_id INTEGER PRIMARY KEY,
                 username TEXT,
@@ -23,6 +23,7 @@ async def init_db() -> None:
                 phone_number TEXT,
                 pending_stage INTEGER DEFAULT 0,
                 cold INTEGER DEFAULT 0,
+                blocked_bot INTEGER DEFAULT 0,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
 

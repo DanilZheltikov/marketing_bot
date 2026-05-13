@@ -8,7 +8,7 @@ class UsersRepository(BaseRepository):
     async def add_user(self, user_data: UserCreate) -> None:
         """Сохраняет пользователя в базу."""
         await self.db.execute(
-            """
+            """--sql
             INSERT OR IGNORE INTO users (
                 user_id,
                 username,
@@ -33,11 +33,21 @@ class UsersRepository(BaseRepository):
     ) -> None:
         """Добавляет к пользователю его номер телефона."""
         await self.db.execute(
-            """
+            """--sql
             UPDATE users
             SET phone_number = ?
             WHERE user_id = ?
             """,
             (phone_number, user_id)
+        )
+        await self.db.commit()
+
+    async def remove_inactive_users(self) -> None:
+        """Удаляет неактивные контакты."""
+        await self.db.execute(
+            """--sql
+            DELETE FROM users
+            WHERE cold = 1 OR blocked_bot = 1
+            """
         )
         await self.db.commit()
