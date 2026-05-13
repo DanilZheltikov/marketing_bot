@@ -8,3 +8,9 @@ class UserCreate(BaseModel):
     user_role: str | None = None
 
     model_config = ConfigDict(populate_by_name=True, extra='ignore')
+
+
+class PostCreate(BaseModel):
+    main_post: bool = False
+    post_text: str
+    step_number: int | None = None
