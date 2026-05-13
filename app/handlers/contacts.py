@@ -3,8 +3,8 @@ from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import Message, ReplyKeyboardRemove
 
 from core.constants import CONTACT_RECEIVED, ERROR_MESSAGE
-from core.database import UsersRepository
 from core.schemas import UserCreate
+from crud_repositories.user import UsersRepository
 from keyboards.contacts import contact_keyboard
 
 router = Router(name='contacts')

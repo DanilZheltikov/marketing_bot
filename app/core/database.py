@@ -4,9 +4,8 @@ from core.config import settings
 
 from core.schemas import UserCreate
 
-
-class UsersRepository:
-    """Отвечает за CRUD-операции с сущностью User в базе SQLite"""
+class BaseRepository:
+    """Базовый репозиторий."""
 
     def __init__(self, connection: aiosqlite.Connection):
         self.db = connection
@@ -60,8 +59,9 @@ async def init_db() -> None:
                 first_name TEXT,
                 user_role TEXT,
                 phone_number TEXT,
+                pending_stage INTEGER DEFAULT 0,
                 cold INTEGER DEFAULT 0,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
 
             CREATE TABLE IF NOT EXISTS posts (

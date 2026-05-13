@@ -4,7 +4,7 @@ import aiosqlite
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 
-from core.database import UsersRepository
+from crud_repositories.user import UsersRepository
 
 
 class DatabaseMiddleware(BaseMiddleware):
@@ -27,6 +27,8 @@ class DatabaseMiddleware(BaseMiddleware):
 
 
 class AdminMiddleware(BaseMiddleware):
+    """Мидлварь для ограждения админских хенделреров."""
+
     def __init__(self, admin_id: int):
         self.admin_id = admin_id
 
