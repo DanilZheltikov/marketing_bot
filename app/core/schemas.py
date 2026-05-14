@@ -25,3 +25,8 @@ class MailingStatsRead(MailingStatsCreate):
     formatted_date: str
 
     model_config = ConfigDict(extra='ignore')
+
+
+class MailingStatsDates(BaseModel):
+    id: int
+    formatted_date: str

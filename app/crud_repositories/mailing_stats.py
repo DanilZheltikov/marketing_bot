@@ -1,5 +1,9 @@
 from core.database import BaseRepository
-from core.schemas import MailingStatsCreate, MailingStatsRead
+from core.schemas import (
+    MailingStatsCreate,
+    MailingStatsDates,
+    MailingStatsRead
+)
 
 
 class MailingStatsRepository(BaseRepository):
@@ -19,7 +23,7 @@ class MailingStatsRepository(BaseRepository):
         )
         await self.db.commit()
 
-    async def get_dates_from_mailing_stats(self) -> list[dict]:
+    async def get_dates_from_mailing_stats(self) -> list[MailingStatsDates]:
         """Возвращает список словарей с ID и отформатированной датой."""
         async with self.db.execute(
             """--sql
@@ -32,10 +36,7 @@ class MailingStatsRepository(BaseRepository):
         ) as cursor:
             rows = await cursor.fetchall()
 
-            return [
-                {'id': row['id'], 'date': row['formatted_date']}
-                for row in rows
-            ]
+            return [MailingStatsDates(**dict(row)) for row in rows]
 
     async def get_mailing_stats(
         self,
