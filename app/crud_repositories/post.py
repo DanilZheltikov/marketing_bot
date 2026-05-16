@@ -9,10 +9,10 @@ class PostRepository(BaseRepository):
         """Создает пост на главную страницу бота."""
         await self.db.execute(
             """--sql
-            INSERT INTO posts(main_post, post_text)
-            VALUES(:main_post, :post_text)
+            INSERT OR REPLACE INTO posts(main_post, post_text, step_number)
+            VALUES(:main_post, :post_text, :step_number)
             """,
-            post_data.model_dump(exclude_none=True)
+            post_data.model_dump()
         )
         await self.db.commit()
 
@@ -20,7 +20,7 @@ class PostRepository(BaseRepository):
         """Создает прогревающий пост для рассылки."""
         await self.db.execute(
             """--sql
-            INSERT INTO posts(post_text, step_number)
+            INSERT OR REPLACE INTO posts(post_text, step_number)
             VALUES(:post_text, :step_number)
             """,
             post_data.model_dump(exclude_defaults=True)

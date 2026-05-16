@@ -28,9 +28,8 @@ async def init_db() -> None:
             );
 
             CREATE TABLE IF NOT EXISTS posts (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                step_number INTEGER PRIMARY KEY,
                 main_post INTEGER NOT NULL DEFAULT 0,
-                step_number INTEGER,
                 post_text TEXT NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );

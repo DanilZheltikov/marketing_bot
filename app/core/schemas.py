@@ -17,7 +17,7 @@ class PostCreate(BaseModel):
 
     main_post: bool = False
     post_text: str
-    step_number: int | None = None
+    step_number: int
 
 
 class MailingStatsCreate(BaseModel):
