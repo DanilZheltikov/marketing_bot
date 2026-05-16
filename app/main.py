@@ -8,7 +8,7 @@ from core.config import settings
 from core.database import init_db
 from core.middlewares import DatabaseMiddleware
 from handlers.contacts import router as contact_router
-from handlers.admin import router as admin_router
+from handlers.admin import admin_router
 
 
 async def main() -> None:
