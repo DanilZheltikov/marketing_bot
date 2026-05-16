@@ -4,11 +4,17 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from core.constants import (
     ADMIN_PANEL_KEYBOARD_SIZE,
     ADD_MAIN_POST,
+    BACK,
     EXPORT_LEADS_PHONES,
     EXPORT_ROW_SIZE,
-    MAILING_CREATE,
-    MAILING_EDIT_POST,
+    MAILING_POST,
     MAILING_STATS
+)
+
+BACK_TO_ADMIN_PANEL_KEYBOARD = InlineKeyboardMarkup(
+    [
+        [InlineKeyboardButton(text=BACK[0], callback_data=BACK[1])]
+    ]
 )
 
 
@@ -18,8 +24,7 @@ def get_admin_panel_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     buttons = (
         ADD_MAIN_POST,
-        MAILING_CREATE,
-        MAILING_EDIT_POST,
+        MAILING_POST,
         MAILING_STATS
     )
 
