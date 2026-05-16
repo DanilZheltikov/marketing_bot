@@ -6,5 +6,5 @@ class MainPost(StatesGroup):
 
 
 class WarmingPost(StatesGroup):
-    choice_step_number = State()
+    step_number = State()
     post = State()

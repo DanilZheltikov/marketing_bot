@@ -5,10 +5,16 @@ from aiogram.types import CallbackQuery, Message
 from core.constants import (
     ADMIN_CHOICE_STEP_MESSAGE,
     ADMIN_CONFIRM_MESSAGE,
-    ADMIN_WRITE_POST_MESSAGE
+    ADMIN_WRITE_POST_MESSAGE,
+    MAIN_POST_NUMBER
 )
+from core.schemas import PostCreate
+from crud_repositories.post import PostRepository
 from fsm.post import MainPost, WarmingPost
-from keyboards.admin import BACK_TO_ADMIN_PANEL_KEYBOARD
+from keyboards.admin import (
+    BACK_TO_ADMIN_PANEL_KEYBOARD,
+    get_choice_warming_post_keyboard
+)
 
 router = Router()
 
@@ -23,7 +29,18 @@ async def process_main_post(callback: CallbackQuery, state: FSMContext):
 
 
 @router.message(MainPost.post)
-async def add_main_post(message: Message, state: FSMContext):
+async def add_main_post(
+    message: Message,
+    state: FSMContext,
+    post_crud: PostRepository
+):
+    await post_crud.add_main_post(
+        PostCreate(
+            main_post=True,
+            step_number=MAIN_POST_NUMBER,
+            post_text=message.text
+        )
+    )
     await message.edit_text(
         text=ADMIN_CONFIRM_MESSAGE,
         reply_markup=BACK_TO_ADMIN_PANEL_KEYBOARD
@@ -31,8 +48,49 @@ async def add_main_post(message: Message, state: FSMContext):
 
 
 @router.callback_query(F.data == 'mailing_post')
-async def process_warming_post(callback: CallbackQuery, state: FSMContext):
-    await state.set_state(WarmingPost.choice_step_number)
+async def process_сhoise_step_warming_post(
+    callback: CallbackQuery,
+    state: FSMContext
+):
+    await state.set_state(WarmingPost.step_number)
     await callback.message.edit_text(
-        text=ADMIN_CHOICE_STEP_MESSAGE
+        text=ADMIN_CHOICE_STEP_MESSAGE,
+        reply_markup=get_choice_warming_post_keyboard()
+    )
+    await callback.answer()
+
+
+@router.callback_query(
+        F.data.startswith('step_'),
+        WarmingPost.step_number
+    )
+async def process_warming_post_writing(
+    callback: CallbackQuery,
+    state: FSMContext
+):
+    await state.set_state(WarmingPost.post)
+    await callback.message.edit_text(
+        text=ADMIN_WRITE_POST_MESSAGE,
+        reply_markup=BACK_TO_ADMIN_PANEL_KEYBOARD
+    )
+    await callback.answer()
+
+
+@router.message(WarmingPost.post)
+async def add_warming_post(
+    message: Message,
+    state: FSMContext,
+    post_crud: PostRepository
+):
+    post_data = await state.get_data()
+
+    await post_crud.add_warming_post(
+        PostCreate(
+            post_text=message.text,
+            step_number=int(post_data['step_number'].split('_').pop())
+        )
+    )
+    await message.answer(
+        text=ADMIN_CONFIRM_MESSAGE,
+        reply_markup=BACK_TO_ADMIN_PANEL_KEYBOARD
     )

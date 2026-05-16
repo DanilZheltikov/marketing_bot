@@ -5,6 +5,18 @@
 ADMIN_PANEL_KEYBOARD_SIZE = 2
 EXPORT_ROW_SIZE = 1
 
+# choice step warming keyboard size:
+
+CHOICE_KEYBOARD_SIZE = 3
+
+# warming post step count:
+
+STEPS_COUNT = 3
+
+# main post number:
+
+MAIN_POST_NUMBER = STEPS_COUNT + 1
+
 # admin panel buttons text and callback_data:
 
 ADD_MAIN_POST = ('📝 Пост на главную', 'add_main_post')
