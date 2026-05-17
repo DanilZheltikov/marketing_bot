@@ -5,8 +5,8 @@ from core.schemas import PostCreate
 class PostRepository(BaseRepository):
     """Отвечает за CRUD-операции с сущностью Post в базе SQLite"""
 
-    async def add_main_post(self, post_data: PostCreate) -> None:
-        """Создает пост на главную страницу бота."""
+    async def add_post(self, post_data: PostCreate) -> None:
+        """Создает пост."""
         await self.db.execute(
             """--sql
             INSERT OR REPLACE INTO posts(main_post, post_text, step_number)
@@ -15,16 +15,6 @@ class PostRepository(BaseRepository):
             post_data.model_dump()
         )
         await self.db.commit()
-
-    async def add_warming_post(self, post_data: PostCreate) -> None:
-        """Создает прогревающий пост для рассылки."""
-        await self.db.execute(
-            """--sql
-            INSERT OR REPLACE INTO posts(post_text, step_number)
-            VALUES(:post_text, :step_number)
-            """,
-            post_data.model_dump(exclude_defaults=True)
-        )
 
     async def get_main_post(self) -> str | None:
         """Возвращает текст поста для главной."""
