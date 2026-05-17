@@ -19,7 +19,7 @@ async def cmd_admin(message: Message):
 
 @router.callback_query(F.data == 'back')
 async def back_to_admin_panel(callback: CallbackQuery, state: FSMContext):
-    state.clear()
+    await state.clear()
     await callback.message.edit_text(
         text=ADMIN_WELCOME_MESSAGE,
         reply_markup=get_admin_panel_keyboard()

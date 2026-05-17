@@ -33,14 +33,14 @@ async def add_main_post(
     message: Message,
     post_crud: PostRepository
 ):
-    await post_crud.add_main_post(
+    await post_crud.add_post(
         PostCreate(
             main_post=True,
             step_number=MAIN_POST_NUMBER,
             post_text=message.text
         )
     )
-    await message.edit_text(
+    await message.answer(
         text=ADMIN_CONFIRM_MESSAGE,
         reply_markup=BACK_TO_ADMIN_PANEL_KEYBOARD
     )
@@ -84,7 +84,7 @@ async def add_warming_post(
 ):
     post_data = await state.get_data()
 
-    await post_crud.add_warming_post(
+    await post_crud.add_post(
         PostCreate(
             post_text=message.text,
             step_number=int(post_data['step'])
