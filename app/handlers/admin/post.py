@@ -31,7 +31,6 @@ async def process_main_post(callback: CallbackQuery, state: FSMContext):
 @router.message(MainPost.post)
 async def add_main_post(
     message: Message,
-    state: FSMContext,
     post_crud: PostRepository
 ):
     await post_crud.add_main_post(
@@ -68,6 +67,7 @@ async def process_warming_post_writing(
     callback: CallbackQuery,
     state: FSMContext
 ):
+    await state.update_data(step=callback.data.split('_').pop())
     await state.set_state(WarmingPost.post)
     await callback.message.edit_text(
         text=ADMIN_WRITE_POST_MESSAGE,
@@ -87,7 +87,7 @@ async def add_warming_post(
     await post_crud.add_warming_post(
         PostCreate(
             post_text=message.text,
-            step_number=int(post_data['step_number'].split('_').pop())
+            step_number=int(post_data['step'])
         )
     )
     await message.answer(
