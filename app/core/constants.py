@@ -9,6 +9,10 @@ EXPORT_ROW_SIZE = 1
 
 CHOICE_KEYBOARD_SIZE = 3
 
+# warming post first step number:
+
+FIRST_STEP = 1
+
 # warming post step count:
 
 STEPS_COUNT = 3

@@ -8,13 +8,14 @@ from core.constants import (
     CHOICE_KEYBOARD_SIZE,
     EXPORT_LEADS_PHONES,
     EXPORT_ROW_SIZE,
+    FIRST_STEP,
     MAILING_POST,
     MAILING_STATS,
     STEPS_COUNT
 )
 
 BACK_TO_ADMIN_PANEL_KEYBOARD = InlineKeyboardMarkup(
-    [
+    inline_keyboard=[
         [InlineKeyboardButton(text=BACK[0], callback_data=BACK[1])]
     ]
 )
@@ -47,7 +48,7 @@ def get_admin_panel_keyboard() -> InlineKeyboardMarkup:
 def get_choice_warming_post_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    for step_number in range(STEPS_COUNT):
+    for step_number in range(FIRST_STEP, FIRST_STEP + STEPS_COUNT):
         builder.button(
             text=f'{step_number}',
             callback_data=f'step_{step_number}'
