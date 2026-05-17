@@ -21,6 +21,9 @@ router = Router()
 
 @router.callback_query(F.data == 'add_main_post')
 async def process_main_post(callback: CallbackQuery, state: FSMContext):
+    """
+    Устанавливает состояние ожидания текста главного поста и обновляет меню.
+    """
     await state.set_state(MainPost.post)
     await callback.message.edit_text(
         text=ADMIN_WRITE_POST_MESSAGE,
@@ -33,6 +36,8 @@ async def add_main_post(
     message: Message,
     post_crud: PostRepository
 ):
+    """Сохраняет главный пост в базу данных и уведомляет об успехе."""
+
     await post_crud.add_post(
         PostCreate(
             main_post=True,
@@ -51,6 +56,9 @@ async def process_сhoise_step_warming_post(
     callback: CallbackQuery,
     state: FSMContext
 ):
+    """
+    Переводит в режим выбора шага прогрева и отображает клавиатуру этапов.
+    """
     await state.set_state(WarmingPost.step_number)
     await callback.message.edit_text(
         text=ADMIN_CHOICE_STEP_MESSAGE,
@@ -67,6 +75,8 @@ async def process_warming_post_writing(
     callback: CallbackQuery,
     state: FSMContext
 ):
+    """Фиксирует номер шага прогрева и запрашивает текст сообщения."""
+
     await state.update_data(step=callback.data.split('_').pop())
     await state.set_state(WarmingPost.post)
     await callback.message.edit_text(
@@ -82,6 +92,9 @@ async def add_warming_post(
     state: FSMContext,
     post_crud: PostRepository
 ):
+    """
+    Сохраняет прогревочный пост для выбранного шага и подтверждает сохранение.
+    """
     post_data = await state.get_data()
 
     await post_crud.add_post(

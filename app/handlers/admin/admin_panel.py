@@ -11,6 +11,8 @@ router = Router(name='admin_panel')
 
 @router.message(Command('admin'))
 async def cmd_admin(message: Message):
+    """Паналь администратора"""
+
     await message.answer(
         text=ADMIN_WELCOME_MESSAGE,
         reply_markup=get_admin_panel_keyboard()
@@ -19,6 +21,8 @@ async def cmd_admin(message: Message):
 
 @router.callback_query(F.data == 'back')
 async def back_to_admin_panel(callback: CallbackQuery, state: FSMContext):
+    """Возврат к панели администратора и очистка состояния."""
+
     await state.clear()
     await callback.message.edit_text(
         text=ADMIN_WELCOME_MESSAGE,

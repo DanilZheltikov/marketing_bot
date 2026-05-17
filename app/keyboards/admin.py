@@ -46,6 +46,8 @@ def get_admin_panel_keyboard() -> InlineKeyboardMarkup:
 
 
 def get_choice_warming_post_keyboard() -> InlineKeyboardMarkup:
+    """Создает клавиатуру для выбора шага прогревающего поста."""
+
     builder = InlineKeyboardBuilder()
 
     for step_number in range(FIRST_STEP, FIRST_STEP + STEPS_COUNT):
