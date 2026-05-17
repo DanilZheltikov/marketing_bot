@@ -2,8 +2,9 @@ from aiogram import F, Router
 from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import Message, ReplyKeyboardRemove
 
-from core.constants import CONTACT_RECEIVED, ERROR_MESSAGE
+from core.constants import CONTACT_RECEIVED, ERROR_MESSAGE, MAIN_POST_EMPTY
 from core.schemas import UserCreate
+from crud_repositories.post import PostRepository
 from crud_repositories.user import UsersRepository
 from keyboards.contacts import contact_keyboard
 
@@ -14,7 +15,8 @@ router = Router(name='contacts')
 async def cmd_start(
     message: Message,
     command: CommandObject,
-    user_crud: UsersRepository
+    user_crud: UsersRepository,
+    post_crud: PostRepository
 ) -> None:
     await user_crud.add_user(
         UserCreate.model_validate(
@@ -22,8 +24,10 @@ async def cmd_start(
             context={'user_role': command.args}
         )
     )
+    post = await post_crud.get_main_post()
+
     await message.answer(
-        text='Пока просто текст',
+        text=MAIN_POST_EMPTY if post is None else post,
         reply_markup=contact_keyboard
     )
 
