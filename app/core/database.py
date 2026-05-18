@@ -31,7 +31,9 @@ async def init_db() -> None:
             CREATE TABLE IF NOT EXISTS posts (
                 step_number INTEGER PRIMARY KEY,
                 main_post INTEGER NOT NULL DEFAULT 0,
-                post_text TEXT NOT NULL,
+                post_text TEXT,
+                content_type TEXT DEFAULT 'text',
+                file_id TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
 

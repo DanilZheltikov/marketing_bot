@@ -2,8 +2,9 @@ from aiogram import F, Router
 from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import Message, ReplyKeyboardRemove
 
-from core.constants import CONTACT_RECEIVED, ERROR_MESSAGE, MAIN_POST_EMPTY
+from core.constants import CONTACT_RECEIVED, ERROR_MESSAGE
 from core.schemas import UserCreate
+from core.utils import send_post
 from crud_repositories.post import PostRepository
 from crud_repositories.user import UsersRepository
 from keyboards.contacts import contact_keyboard
@@ -25,11 +26,7 @@ async def cmd_start(
         )
     )
     post = await post_crud.get_main_post()
-
-    await message.answer(
-        text=MAIN_POST_EMPTY if post is None else post,
-        reply_markup=contact_keyboard
-    )
+    await send_post(bot=message.bot, chat_id=message.chat.id, post=post)
 
 
 @router.message(F.contact)

@@ -1,5 +1,5 @@
 from core.database import BaseRepository
-from core.schemas import PostCreate
+from core.schemas import PostCreate, PostRead
 
 
 class PostRepository(BaseRepository):
@@ -9,18 +9,30 @@ class PostRepository(BaseRepository):
         """Создает пост."""
         await self.db.execute(
             """--sql
-            INSERT OR REPLACE INTO posts(main_post, post_text, step_number)
-            VALUES(:main_post, :post_text, :step_number)
+            INSERT OR REPLACE INTO posts(
+                step_number,
+                main_post,
+                post_text,
+                file_id,
+                content_type
+            )
+            VALUES(
+                :step_number,
+                :main_post,
+                :post_text,
+                :file_id,
+                :content_type
+            )
             """,
             post_data.model_dump()
         )
         await self.db.commit()
 
-    async def get_main_post(self) -> str | None:
+    async def get_main_post(self) -> PostRead | None:
         """Возвращает текст поста для главной."""
         async with self.db.execute(
             """--sql
-            SELECT post_text
+            SELECT *
             FROM posts
             WHERE main_post = 1
             LIMIT 1;
@@ -28,13 +40,13 @@ class PostRepository(BaseRepository):
         ) as cursor:
             row = await cursor.fetchone()
 
-            return row['post_text'] if row else None
+            return PostRead(**dict(row)) if row else None
 
     async def get_warming_post(self, step: int) -> str | None:
         """Возвращает текст поста прогрева по его номеру."""
         async with self.db.execute(
             """--sql
-            SELECT post_text
+            SELECT *
             FROM posts
             WHERE step_number = ?
             LIMIT 1
@@ -43,7 +55,7 @@ class PostRepository(BaseRepository):
         ) as cursor:
             row = await cursor.fetchone()
 
-            return row['post_text'] if row else None
+            return PostRead(**dict(row)) if row else None
 
     async def remove_main_post(self) -> None:
         """Удаляет пост главной страницы."""

@@ -9,6 +9,7 @@ from core.constants import (
     MAIN_POST_NUMBER
 )
 from core.schemas import PostCreate
+from core.utils import extract_content_from_message
 from crud_repositories.post import PostRepository
 from fsm.post import MainPost, WarmingPost
 from keyboards.admin import (
@@ -43,7 +44,7 @@ async def add_main_post(
         PostCreate(
             main_post=True,
             step_number=MAIN_POST_NUMBER,
-            post_text=message.text
+            **extract_content_from_message(message)
         )
     )
     await state.clear()
@@ -101,11 +102,12 @@ async def add_warming_post(
 
     await post_crud.add_post(
         PostCreate(
-            post_text=message.text,
-            step_number=int(post_data['step'])
+            step_number=int(post_data['step']),
+            **extract_content_from_message(message)
         )
     )
     await state.clear()
+
     await message.answer(
         text=ADMIN_CONFIRM_MESSAGE,
         reply_markup=BACK_TO_ADMIN_PANEL_KEYBOARD

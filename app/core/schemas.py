@@ -15,9 +15,21 @@ class UserCreate(BaseModel):
 class PostCreate(BaseModel):
     """Схема для создания поста в базе."""
 
-    main_post: bool = False
-    post_text: str
     step_number: int
+    main_post: bool = False
+    post_text: str | None
+    content_type: str
+    file_id: str | None = None
+
+
+class PostRead(BaseModel):
+    """Схема для представления поста."""
+
+    content_type: str
+    post_text: str | None
+    file_id: str | None
+
+    model_config = ConfigDict(extra='ignore')
 
 
 class MailingStatsCreate(BaseModel):
