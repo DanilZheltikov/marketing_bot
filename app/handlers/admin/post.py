@@ -2,6 +2,7 @@ from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 
+from core.callbacks import PostStepCallback
 from core.constants import (
     ADMIN_CHOICE_STEP_MESSAGE,
     ADMIN_CONFIRM_MESSAGE,
@@ -71,16 +72,17 @@ async def process_сhoise_step_warming_post(
 
 
 @router.callback_query(
-        F.data.startswith('step_'),
+        PostStepCallback.filter(),
         WarmingPost.step_number
     )
 async def process_warming_post_writing(
     callback: CallbackQuery,
+    callback_data: PostStepCallback,
     state: FSMContext
 ):
     """Фиксирует номер шага прогрева и запрашивает текст сообщения."""
 
-    await state.update_data(step=callback.data.split('_').pop())
+    await state.update_data(step=callback_data.step)
     await state.set_state(WarmingPost.post)
     await callback.message.edit_text(
         text=ADMIN_WRITE_POST_MESSAGE,
@@ -102,7 +104,7 @@ async def add_warming_post(
 
     await post_crud.add_post(
         PostCreate(
-            step_number=int(post_data['step']),
+            step_number=post_data['step'],
             **extract_content_from_message(message)
         )
     )

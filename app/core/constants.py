@@ -46,7 +46,7 @@ ADMIN_CHOICE_STEP_MESSAGE = 'Выберите номер поста прогре
 
 # admin confirm message:
 
-ADMIN_CONFIRM_MESSAGE = 'Пост опубликован'
+ADMIN_CONFIRM_MESSAGE = 'Пост сохранен в базу'
 
 # choice date mailing message:
 

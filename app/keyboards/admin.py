@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from core.callbacks import MailingDateCallback
+from core.callbacks import MailingDateCallback, PostStepCallback
 from core.constants import (
     ADMIN_PANEL_KEYBOARD_SIZE,
     ADD_MAIN_POST,
@@ -55,7 +55,7 @@ def get_choice_warming_post_keyboard() -> InlineKeyboardMarkup:
     for step_number in range(FIRST_STEP, FIRST_STEP + STEPS_COUNT):
         builder.button(
             text=f'{step_number}',
-            callback_data=f'step_{step_number}'
+            callback_data=PostStepCallback(step=step_number).pack()
         )
     builder.adjust(CHOICE_KEYBOARD_SIZE)
     builder.attach(
@@ -79,6 +79,6 @@ def get_choice_mailing_date_keyboard(
     for mailing_date in mailing_dates:
         builder.button(
             text=mailing_date.formatted_date,
-            callback_data=MailingDateCallback(id=mailing_date.id)
+            callback_data=MailingDateCallback(id=mailing_date.id).pack()
         )
     return builder.as_markup()
