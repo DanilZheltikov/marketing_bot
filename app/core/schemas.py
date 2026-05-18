@@ -35,7 +35,7 @@ class PostRead(BaseModel):
 class MailingStatsCreate(BaseModel):
     """Схема для создания статистики рассылки в базе."""
 
-    sucсess: int
+    success: int
     cold_users: int
     bot_blocked_users: int
 

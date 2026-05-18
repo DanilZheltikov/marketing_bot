@@ -42,7 +42,7 @@ class PostRepository(BaseRepository):
 
             return PostRead(**dict(row)) if row else None
 
-    async def get_warming_post(self, step: int) -> str | None:
+    async def get_warming_post(self, step: int) -> PostRead | None:
         """Возвращает текст поста прогрева по его номеру."""
         async with self.db.execute(
             """--sql
