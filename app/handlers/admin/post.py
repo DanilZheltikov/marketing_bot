@@ -34,6 +34,7 @@ async def process_main_post(callback: CallbackQuery, state: FSMContext):
 @router.message(MainPost.post)
 async def add_main_post(
     message: Message,
+    state: FSMContext,
     post_crud: PostRepository
 ):
     """Сохраняет главный пост в базу данных и уведомляет об успехе."""
@@ -45,6 +46,7 @@ async def add_main_post(
             post_text=message.text
         )
     )
+    await state.clear()
     await message.answer(
         text=ADMIN_CONFIRM_MESSAGE,
         reply_markup=BACK_TO_ADMIN_PANEL_KEYBOARD
@@ -103,6 +105,7 @@ async def add_warming_post(
             step_number=int(post_data['step'])
         )
     )
+    await state.clear()
     await message.answer(
         text=ADMIN_CONFIRM_MESSAGE,
         reply_markup=BACK_TO_ADMIN_PANEL_KEYBOARD
