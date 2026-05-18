@@ -4,7 +4,7 @@ from aiogram import Bot
 from aiogram.types import Message
 
 from core.constants import MAIN_POST_EMPTY
-from core.schemas import PostRead
+from core.schemas import MailingStatsRead, PostRead
 from keyboards.contacts import contact_keyboard
 
 
@@ -73,3 +73,13 @@ async def send_post(
                 text=post.post_text,
                 **params
             )
+
+
+def get_mailing_stat_message(stats: MailingStatsRead) -> str:
+    """Собирает из статистики строку для сообщения."""
+    return (
+        f'📊 *Статистика рассылки от {stats.formatted_date}*\n\n'
+        f'❄️ Холодных: {stats.cold_users}\n'
+        f'🚫 Заблокировали бота: {stats.bot_blocked_users}\n\n'
+        f'✉️ Успешно доставленно: {stats.sucсess}'
+    )

@@ -1,7 +1,7 @@
 from core.database import BaseRepository
 from core.schemas import (
     MailingStatsCreate,
-    MailingStatsDates,
+    MailingStatsDate,
     MailingStatsRead
 )
 
@@ -16,14 +16,14 @@ class MailingStatsRepository(BaseRepository):
         """Добавляет статистику рассылок в базу."""
         await self.db.execute(
             """--sql
-            INSERT INTO mailing_stats(cold_users, blocked_bot_users)
-            VALUES (:cold_users, :blocked_bot_users)
+            INSERT INTO mailing_stats(cold_users, blocked_bot_users, success)
+            VALUES (:cold_users, :blocked_bot_users, :success)
             """,
             mailing_stats_data.model_dump()
         )
         await self.db.commit()
 
-    async def get_dates_from_mailing_stats(self) -> list[MailingStatsDates]:
+    async def get_dates_from_mailing_stats(self) -> list[MailingStatsDate]:
         """Возвращает список словарей с ID и отформатированной датой."""
         async with self.db.execute(
             """--sql
@@ -36,7 +36,7 @@ class MailingStatsRepository(BaseRepository):
         ) as cursor:
             rows = await cursor.fetchall()
 
-            return [MailingStatsDates(**dict(row)) for row in rows]
+            return [MailingStatsDate(**dict(row)) for row in rows]
 
     async def get_mailing_stats(
         self,
@@ -45,6 +45,7 @@ class MailingStatsRepository(BaseRepository):
         async with self.db.execute(
             """--sql
             SELECT
+                success,
                 cold_users,
                 blocked_bot_users,
                 strftime('%d.%m.%Y в %H:%M', created_at) as formatted_date

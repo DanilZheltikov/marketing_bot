@@ -48,6 +48,10 @@ ADMIN_CHOICE_STEP_MESSAGE = 'Выберите номер поста прогре
 
 ADMIN_CONFIRM_MESSAGE = 'Пост опубликован'
 
+# choice date mailing message:
+
+MAILING_STATS_MESSAGE = 'Выберите дату рассылки.'
+
 
 # CONTACT
 # user button:

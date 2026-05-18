@@ -1,6 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from core.callbacks import MailingDateCallback
 from core.constants import (
     ADMIN_PANEL_KEYBOARD_SIZE,
     ADD_MAIN_POST,
@@ -13,6 +14,7 @@ from core.constants import (
     MAILING_STATS,
     STEPS_COUNT
 )
+from core.schemas import MailingStatsDate
 
 BACK_TO_ADMIN_PANEL_KEYBOARD = InlineKeyboardMarkup(
     inline_keyboard=[
@@ -59,4 +61,24 @@ def get_choice_warming_post_keyboard() -> InlineKeyboardMarkup:
     builder.attach(
         InlineKeyboardBuilder.from_markup(BACK_TO_ADMIN_PANEL_KEYBOARD)
     )
+    return builder.as_markup()
+
+
+def get_choice_mailing_date_keyboard(
+    mailing_dates: list[MailingStatsDate]
+) -> InlineKeyboardMarkup:
+    """Создает клавиатуру для выбора даты рассылки."""
+
+    if not mailing_dates:
+        return BACK_TO_ADMIN_PANEL_KEYBOARD
+
+    builder = InlineKeyboardBuilder()
+    builder.attach(
+        InlineKeyboardBuilder.from_markup(BACK_TO_ADMIN_PANEL_KEYBOARD)
+    )
+    for mailing_date in mailing_dates:
+        builder.button(
+            text=mailing_date.formatted_date,
+            callback_data=MailingDateCallback(id=mailing_date.id)
+        )
     return builder.as_markup()
