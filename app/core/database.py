@@ -39,6 +39,7 @@ async def init_db() -> None:
 
             CREATE TABLE IF NOT EXISTS mailing_stats (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                success INTEGER,
                 cold_users INTEGER,
                 blocked_bot_users INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP

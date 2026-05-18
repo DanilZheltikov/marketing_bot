@@ -35,6 +35,7 @@ class PostRead(BaseModel):
 class MailingStatsCreate(BaseModel):
     """Схема для создания статистики рассылки в базе."""
 
+    sucсess: int
     cold_users: int
     bot_blocked_users: int
 
@@ -47,7 +48,7 @@ class MailingStatsRead(MailingStatsCreate):
     model_config = ConfigDict(extra='ignore')
 
 
-class MailingStatsDates(BaseModel):
+class MailingStatsDate(BaseModel):
     """Схема для отображения дат рассылок в базе."""
 
     id: int
