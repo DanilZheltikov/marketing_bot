@@ -24,6 +24,7 @@ async def init_db() -> None:
                 pending_stage INTEGER DEFAULT 0,
                 cold INTEGER DEFAULT 0,
                 blocked_bot INTEGER DEFAULT 0,
+                shared_contact INTEGER DEFAULT 0,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
 

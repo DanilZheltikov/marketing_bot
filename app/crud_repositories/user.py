@@ -35,10 +35,10 @@ class UsersRepository(BaseRepository):
         await self.db.execute(
             """--sql
             UPDATE users
-            SET phone_number = ?
+            SET phone_number = ?, shared_contact = ?
             WHERE user_id = ?
             """,
-            (phone_number, user_id)
+            (phone_number, True, user_id)
         )
         await self.db.commit()
 
